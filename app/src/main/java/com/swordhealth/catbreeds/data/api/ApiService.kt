@@ -5,6 +5,6 @@ import retrofit2.Response
 import retrofit2.http.GET
 
 interface ApiService {
-    @GET("cats")
+    @GET("breeds")
     suspend fun getBreeds(): Response<List<Breed>>
 }
