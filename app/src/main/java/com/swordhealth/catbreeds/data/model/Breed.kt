@@ -15,12 +15,16 @@ data class Breed (
     val country_codes: String,
     @Json(name = "country_code")
     val country_code: String,
+    @Json(name = "description")
+    val description: String,
     @Json(name = "life_span")
     val life_span: String,
     @Json(name = "wikipedia_url")
     val wikipedia_url: String,
     @Json(name = "weight")
-    val weight: Weight)
+    val weight: Weight,
+    @Json(name = "reference_image_id")
+    val reference_image_id: String)
 
 data class Weight(
     @Json(name = "imperial")
