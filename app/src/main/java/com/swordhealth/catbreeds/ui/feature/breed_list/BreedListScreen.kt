@@ -5,8 +5,10 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
@@ -21,6 +23,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.swordhealth.catbreeds.data.model.Breed
+import com.swordhealth.catbreeds.ui.feature.bottomButtons
 import kotlinx.coroutines.flow.Flow
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -29,11 +32,10 @@ fun BreedListScreen(
     navController: NavController? = null,
     viewModel: BreedViewModel = hiltViewModel(),
     state: BreedContract.State,
-    effectFlow: Flow<BreedContract.Effect>?,
     onNavigationRequested: (itemId: String) -> Unit) {
     Scaffold() {
         Box {
-            BreedList(breeds = state.breeds) {itemId ->
+            BreedList(navController, breeds = state.breeds) {itemId ->
                 onNavigationRequested(itemId)
             }
             when {
@@ -47,16 +49,20 @@ fun BreedListScreen(
 
 @Composable
 fun BreedList(
+    navController: NavController? = null,
     breeds: List<Breed>,
     onItemClicked: (id: String) -> Unit
 ) {
-    LazyColumn(
-        contentPadding = PaddingValues(bottom = 16.dp),
-        modifier = Modifier.fillMaxSize()
-    ) {
-        items(breeds) { item ->
-            BreedItemRow(item = item, onItemClicked = onItemClicked)
+    Column(Modifier.fillMaxSize()) {
+        LazyVerticalGrid(
+            columns = GridCells.Adaptive(128.dp),
+            modifier = Modifier.weight(1f)
+        ) {
+            items(breeds) { item ->
+                BreedItemRow(item = item, onItemClicked = onItemClicked)
+            }
         }
+        bottomButtons(navController)
     }
 }
 
@@ -69,25 +75,29 @@ fun BreedItemRow(
         modifier = Modifier
             .animateContentSize()
             .clickable { onItemClicked(item.id) }
-            .padding(10.dp)
+            .padding(5.dp)
     ) {
-        Row (modifier = Modifier.animateContentSize()) {
-            Column(){
-                Image(
-                    painter = rememberImagePainter(
-                        data = "https://cdn2.thecatapi.com/images/${item.reference_image_id}.jpg"
-                    ),
-                    contentDescription = null,
-                    modifier = Modifier.size(100.dp)
-                )
-                    Text(
-                        text = item?.name ?: "",
-                        textAlign = TextAlign.Center,
-                        overflow = TextOverflow.Ellipsis,
-                    )
-            }
+        Column(
+            modifier = Modifier.padding(5.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ){
+            Image(
+                painter = rememberImagePainter(
+                    data = "https://cdn2.thecatapi.com/images/${item.reference_image_id}.jpg"
+                ),
+                contentDescription = null,
+                modifier = Modifier.size(100.dp)
+            )
+            Text(
+                text = item.name,
+                textAlign = TextAlign.Center,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 2,
+                minLines = 2
+            )
         }
     }
+
 }
 
 @Composable
