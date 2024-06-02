@@ -8,8 +8,8 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.swordhealth.catbreeds.data.repository.MainRepository
-import com.swordhealth.catbreeds.ui.view.BreedDetailsScreen
+import com.swordhealth.catbreeds.ui.feature.breed_details.BreedDetailsScreen
+import com.swordhealth.catbreeds.ui.feature.breed_details.BreedDetailsViewModel
 import com.swordhealth.catbreeds.ui.feature.breed_list.BreedListScreen
 import com.swordhealth.catbreeds.ui.feature.breed_list.BreedViewModel
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -30,7 +30,6 @@ fun AppNavHost(
             BreedListScreen(
                 navController = navController,
                 state = viewModel.state,
-                effectFlow = viewModel.effects.receiveAsFlow(),
                 viewModel = viewModel,
                 onNavigationRequested = { itemId ->
                     navController.navigate("${NavigationItem.BreedDetail.route}/${itemId}")
@@ -38,12 +37,19 @@ fun AppNavHost(
             )
         }
         composable(
-            route = NavigationItem.BreedDetail.route,
-            arguments = listOf(navArgument("breed_id") {
+            route = NavigationItem.BreedDetail.route + "/{breed_id}",
+            arguments = listOf(navArgument(Arg.BREED_ID) {
                 type = NavType.StringType
+                nullable = true
             })
         ) {
-            BreedDetailsScreen(navController)
+            val viewModel: BreedDetailsViewModel = hiltViewModel()
+            BreedDetailsScreen(
+                viewModel = viewModel,
+                state = viewModel.state)
+        }
+        composable(NavigationItem.Favourites.route) {
+
         }
     }
 }
