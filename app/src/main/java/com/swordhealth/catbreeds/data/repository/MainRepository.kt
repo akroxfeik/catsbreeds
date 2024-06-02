@@ -5,4 +5,6 @@ import javax.inject.Inject
 
 class MainRepository @Inject constructor(private val apiHelper: ApiHelper) {
     suspend fun getBreeds() =  apiHelper.getBreeds()
+
+    suspend fun getBreed(breedId: String) = apiHelper.getBreed(breedId)
 }

@@ -7,4 +7,6 @@ import javax.inject.Inject
 class ApiHelperImpl @Inject constructor(private val apiService: ApiService) : ApiHelper {
 
     override suspend fun getBreeds(): Response<List<Breed>> = apiService.getBreeds()
+
+    override suspend fun getBreed(breedId: String): Response<Breed> = apiService.getBreed(breedId)
 }

@@ -5,4 +5,6 @@ import retrofit2.Response
 
 interface ApiHelper {
     suspend fun getBreeds(): Response<List<Breed>>
+
+    suspend fun getBreed(breedId: String): Response<Breed>
 }
