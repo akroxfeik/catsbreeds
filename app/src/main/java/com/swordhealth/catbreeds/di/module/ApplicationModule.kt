@@ -8,6 +8,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -27,11 +28,29 @@ class ApplicationModule {
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
         OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
+            .apply {
+                addHeader()
+            }
             .build()
     } else OkHttpClient
         .Builder()
+        .apply {
+            addHeader()
+        }
         .build()
 
+    private fun OkHttpClient.Builder.addHeader() {
+        addInterceptor(
+            Interceptor { chain ->
+                val builder = chain.request().newBuilder()
+                builder.addHeader(
+                    "x-api-key",
+                    "live_LT9ueIYw5PJjQ7tbrml7qs1wUbPz7Pec24MSFUDkC4dbaAtDJpYWzz75Q6zxZbSA"
+                )
+                return@Interceptor chain.proceed(builder.build())
+            }
+        )
+    }
 
     @Provides
     @Singleton
