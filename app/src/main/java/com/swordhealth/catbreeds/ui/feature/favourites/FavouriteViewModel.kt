@@ -9,6 +9,7 @@ import com.swordhealth.catbreeds.data.repository.MainRepository
 import com.swordhealth.catbreeds.utils.NetworkHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.Channel.Factory.UNLIMITED
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -25,7 +26,7 @@ class FavouriteViewModel @Inject constructor(
     )
         private set
 
-    var effects = Channel<FavouriteContract.Effect>(Channel.UNLIMITED)
+    var effects = Channel<FavouriteContract.Effect>(UNLIMITED)
 
     init {
         viewModelScope.launch { fetchFavourites() }
@@ -38,16 +39,25 @@ class FavouriteViewModel @Inject constructor(
                     if (it.isSuccessful) {
                         state = state.copy(favourites = it.body() ?: listOf())
                         state.favourites.onEach { favourite ->
-                            mainRepository.getBreed(favourite.sub_id).let {
+                            mainRepository.getBreed(favourite.image_id).let {
                                 if (it.isSuccessful) {
                                     val breed = it.body()!!.copy(favourite = favourite)
-                                    state = state.copy(breeds = state.breeds + breed)
-                                }
+                                    state = state.copy(breeds = state.breeds + breed, isLoading = false)
+                                    effects.send(FavouriteContract.Effect.DataWasLoaded)
+                                } else error()
                             }
                         }
-                    }
+                    } else error()
                 }
+            } else {
+                state = state.copy(isLoading = false)
+                effects.send(FavouriteContract.Effect.NoDataConnection)
             }
         }
+    }
+
+    private suspend fun error() {
+        state = state.copy(isLoading = false)
+        effects.send(FavouriteContract.Effect.Error)
     }
 }
