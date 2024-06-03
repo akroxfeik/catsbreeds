@@ -18,7 +18,6 @@ class BreedViewModel @Inject constructor(
     private val mainRepository: MainRepository,
     private val networkHelper: NetworkHelper
 ) : ViewModel() {
-
     var state by mutableStateOf(
         BreedContract.State(
             breeds = listOf(),
@@ -28,7 +27,6 @@ class BreedViewModel @Inject constructor(
         private set
 
     var effects = Channel<BreedContract.Effect>(UNLIMITED)
-
 
     init {
         viewModelScope.launch { fetchBreeds() }
@@ -40,9 +38,16 @@ class BreedViewModel @Inject constructor(
                 mainRepository.getBreeds().let {
                     if (it.isSuccessful) {
                         state = state.copy(breeds = it.body() ?: listOf(), isLoading = false)
-                    } else effects.send(BreedContract.Effect.Error)
+                        effects.send(BreedContract.Effect.DataWasLoaded)
+                    } else {
+                        state = state.copy(isLoading = false)
+                        effects.send(BreedContract.Effect.Error)
+                    }
                 }
-            } else effects.send(BreedContract.Effect.NoDataConnection)
+            } else {
+                state = state.copy(isLoading = false)
+                effects.send(BreedContract.Effect.NoDataConnection)
+            }
         }
     }
 }
