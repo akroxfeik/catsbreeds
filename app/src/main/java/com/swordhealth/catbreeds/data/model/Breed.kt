@@ -24,7 +24,9 @@ data class Breed (
     @Json(name = "weight")
     val weight: Weight,
     @Json(name = "reference_image_id")
-    val reference_image_id: String)
+    val reference_image_id: String,
+
+    val favourite: Favourite? = null)
 
 data class Weight(
     @Json(name = "imperial")
