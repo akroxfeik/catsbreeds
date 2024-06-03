@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberImagePainter
 import com.swordhealth.catbreeds.data.model.Breed
 
@@ -32,38 +33,51 @@ fun BreedDetailsScreen(
 }
 
 @Composable
-fun BreedDetails(breed: Breed?) {
-    breed?.let {
-        Column(Modifier.padding(10.dp).fillMaxWidth()){
+fun BreedDetails(item: Breed?) {
+    item?.let {
+        Column(
+            Modifier
+                .padding(10.dp)
+                .fillMaxWidth()){
             Text(
-                text = breed.name,
+                text = item.name,
                 fontSize = 20.sp,
                 modifier = Modifier.padding(5.dp))
             Column(Modifier.fillMaxWidth()){
                 Image(
                     painter = rememberImagePainter(
-                        data = "https://cdn2.thecatapi.com/images/${breed.reference_image_id}.jpg"
+                        data = "https://cdn2.thecatapi.com/images/${item.reference_image_id}.jpg"
                     ),
                     contentDescription = null,
                 )
             }
-            Text(text = "Origin: ${breed.origin}")
-            Text(text = "Temperament: ${breed.temperament}")
-            Text(text = "Description:\n${breed.description}")
-            Row(
-                modifier = Modifier.fillMaxWidth().padding(5.dp),
-                horizontalArrangement = Arrangement.SpaceEvenly,
-            ){
-                Button(
-                    onClick = {
-
-                    },
-                    modifier = Modifier.weight(1f)
-                ){
-                    Text("Add Favoutite")
-                }
-            }
+            Text(text = "Origin: ${item.origin}")
+            Text(text = "Temperament: ${item.temperament}")
+            Text(text = "Description:\n${item.description}")
+            favouriteButton(item)
         }
-        // TODO e. A button to add/remove the breed from the favourites.
     }
+}
+
+@Composable
+fun favouriteButton(item: Breed?) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(5.dp),
+        horizontalArrangement = Arrangement.SpaceEvenly,
+    ){
+        Button(
+            onClick = {
+                //viewModel<BreedDetailsViewModel>().onFavouriteButtonClicked(item)
+            },
+            modifier = Modifier.weight(1f)
+        ){
+            Text(getFavouriteButtonText(item))
+        }
+    }
+}
+
+fun getFavouriteButtonText(item: Breed?): String {
+    return if (item?.favourite != null) "Remove Favourite" else "Add Favourite"
 }
