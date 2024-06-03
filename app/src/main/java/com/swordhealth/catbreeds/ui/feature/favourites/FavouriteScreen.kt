@@ -14,18 +14,17 @@ import com.swordhealth.catbreeds.ui.feature.LoadingBar
 fun FavouritesScreen(
     navController: NavController? = null,
     viewModel: FavouriteViewModel = hiltViewModel(),
-    state: FavouriteContract.State,
     onNavigationRequested: (itemId: String) -> Unit
 ) {
     Scaffold() {
         Box {
-            BreedList(navController, breeds = state.breeds) {itemId ->
+            BreedList(navController, breeds = viewModel.state.breeds) {itemId ->
                 onNavigationRequested(itemId)
             }
             when {
-                state.isLoading -> LoadingBar()
+                viewModel.state.isLoading -> LoadingBar()
             }
-            if(state.isLoading)
+            if(viewModel.state.isLoading)
                 LoadingBar()
         }
     }

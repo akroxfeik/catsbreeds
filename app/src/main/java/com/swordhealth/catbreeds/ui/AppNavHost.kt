@@ -30,7 +30,6 @@ fun AppNavHost(
             val viewModel: BreedViewModel = hiltViewModel()
             BreedListScreen(
                 navController = navController,
-                state = viewModel.state,
                 viewModel = viewModel,
                 onNavigationRequested = { itemId ->
                     navController.navigate("${NavigationItem.BreedDetail.route}/${itemId}")
@@ -53,7 +52,6 @@ fun AppNavHost(
             val viewModel: FavouriteViewModel = hiltViewModel()
             FavouritesScreen(
                 navController = navController,
-                state = viewModel.state,
                 viewModel = viewModel,
                 onNavigationRequested = { itemId ->
                     navController.navigate("${NavigationItem.BreedDetail.route}/${itemId}")
