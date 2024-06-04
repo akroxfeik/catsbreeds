@@ -10,11 +10,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.swordhealth.catbreeds.ui.feature.breed_details.BreedDetailsScreen
-import com.swordhealth.catbreeds.ui.feature.breed_details.BreedDetailsViewModel
 import com.swordhealth.catbreeds.ui.feature.breed_list.BreedListScreen
-import com.swordhealth.catbreeds.ui.feature.breed_list.BreedViewModel
 import com.swordhealth.catbreeds.ui.feature.favourites.FavouritesScreen
-import com.swordhealth.catbreeds.ui.feature.favourites.FavouriteViewModel
 
 @Composable
 fun AppNavHost(
@@ -29,11 +26,10 @@ fun AppNavHost(
         startDestination = startDestination,
     ) {
         composable(NavigationItem.BreedList.route) {
-            val viewModel: BreedViewModel = hiltViewModel()
             BreedListScreen(
                 showSnackbar = showSnackbar,
                 navController = navController,
-                viewModel = viewModel,
+                viewModel = hiltViewModel(),
                 onNavigationRequested = { itemId ->
                     navController.navigate("${NavigationItem.BreedDetail.route}/${itemId}")
                 }
@@ -46,18 +42,15 @@ fun AppNavHost(
                 nullable = true
             })
         ) {
-            val viewModel: BreedDetailsViewModel = hiltViewModel()
             BreedDetailsScreen(
                 showSnackbar = showSnackbar,
-                viewModel = viewModel,
-                state = viewModel.state)
+                viewModel = hiltViewModel())
         }
         composable(NavigationItem.Favourites.route) {
-            val viewModel: FavouriteViewModel = hiltViewModel()
             FavouritesScreen(
                 showSnackbar = showSnackbar,
                 navController = navController,
-                viewModel = viewModel,
+                viewModel = hiltViewModel(),
                 onNavigationRequested = { itemId ->
                     navController.navigate("${NavigationItem.BreedDetail.route}/${itemId}")
                 }

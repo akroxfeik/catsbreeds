@@ -25,8 +25,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 @Composable
 fun BreedDetailsScreen(
     showSnackbar: (String, SnackbarDuration) -> Unit,
-    viewModel: BreedDetailsViewModel = hiltViewModel(),
-    state: BreedDetailsContract.State) {
+    viewModel: BreedDetailsViewModel = hiltViewModel()) {
     val effectFlow = viewModel.effects.receiveAsFlow()
     LaunchedEffect(effectFlow) {
         effectFlow.onEach { effect ->
@@ -44,7 +43,7 @@ fun BreedDetailsScreen(
         }.collect()
     }
     Box {
-        BreedDetails(viewModel, state.breed)
+        BreedDetails(viewModel, viewModel.state.breed)
     }
 }
 
