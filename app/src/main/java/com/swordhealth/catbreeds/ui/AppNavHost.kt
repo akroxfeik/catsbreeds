@@ -29,7 +29,6 @@ fun AppNavHost(
             BreedListScreen(
                 showSnackbar = showSnackbar,
                 navController = navController,
-                viewModel = hiltViewModel(),
                 onNavigationRequested = { itemId ->
                     navController.navigate("${NavigationItem.BreedDetail.route}/${itemId}")
                 }
@@ -42,15 +41,12 @@ fun AppNavHost(
                 nullable = true
             })
         ) {
-            BreedDetailsScreen(
-                showSnackbar = showSnackbar,
-                viewModel = hiltViewModel())
+            BreedDetailsScreen(showSnackbar = showSnackbar)
         }
         composable(NavigationItem.Favourites.route) {
             FavouritesScreen(
                 showSnackbar = showSnackbar,
                 navController = navController,
-                viewModel = hiltViewModel(),
                 onNavigationRequested = { itemId ->
                     navController.navigate("${NavigationItem.BreedDetail.route}/${itemId}")
                 }
