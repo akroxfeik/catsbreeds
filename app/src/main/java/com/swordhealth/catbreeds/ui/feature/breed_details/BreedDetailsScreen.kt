@@ -1,6 +1,5 @@
 package com.swordhealth.catbreeds.ui.feature.breed_details
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -23,7 +22,6 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun BreedDetailsScreen(
     showSnackbar: (String, SnackbarDuration) -> Unit,
@@ -64,6 +62,7 @@ fun BreedDetails(viewModel: BreedDetailsViewModel, item: Breed?) {
             Column(Modifier.fillMaxWidth()){
                 Image(
                     painter = rememberImagePainter(
+                        // Bad approach to use hardcoded URL -> won't worry about it for this example
                         data = "https://cdn2.thecatapi.com/images/${item.reference_image_id}.jpg"
                     ),
                     contentDescription = null,

@@ -1,6 +1,5 @@
 package com.swordhealth.catbreeds.ui.feature.favourites
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.runtime.Composable
@@ -13,7 +12,6 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun FavouritesScreen(
     showSnackbar: (String, SnackbarDuration) -> Unit,
