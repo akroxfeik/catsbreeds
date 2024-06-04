@@ -9,22 +9,16 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberImagePainter
 import com.swordhealth.catbreeds.data.model.Breed
-import com.swordhealth.catbreeds.ui.feature.breed_list.BreedContract
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -32,39 +26,28 @@ import kotlinx.coroutines.flow.receiveAsFlow
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun BreedDetailsScreen(
+    showSnackbar: (String, SnackbarDuration) -> Unit,
     viewModel: BreedDetailsViewModel = hiltViewModel(),
     state: BreedDetailsContract.State) {
-    val snackbarState = SnackbarHostState()
     val effectFlow = viewModel.effects.receiveAsFlow()
     LaunchedEffect(effectFlow) {
         effectFlow.onEach { effect ->
             when (effect) {
                 is BreedDetailsContract.Effect.DataWasLoaded -> {
-                    snackbarState.showSnackbar(
-                        message = "Breed details are loaded.",
-                        duration = SnackbarDuration.Short
-                    )
+                    showSnackbar("Breed details are loaded.", SnackbarDuration.Short)
                 }
                 is BreedDetailsContract.Effect.Error -> {
-                    snackbarState.showSnackbar(
-                        message = "An error occurred.",
-                        duration = SnackbarDuration.Short
-                    )
+                    showSnackbar("An error occurred.", SnackbarDuration.Short)
                 }
                 is BreedDetailsContract.Effect.NoDataConnection -> {
-                    snackbarState.showSnackbar(
-                        message = "No data connection.",
-                        duration = SnackbarDuration.Short
-                    )
+                    showSnackbar( "No data connection.", SnackbarDuration.Short)
                 }
             }
         }.collect()
     }
-
     Box {
         BreedDetails(viewModel, state.breed)
     }
-
 }
 
 @Composable

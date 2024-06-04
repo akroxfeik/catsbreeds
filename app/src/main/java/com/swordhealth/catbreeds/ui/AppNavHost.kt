@@ -1,5 +1,6 @@
 package com.swordhealth.catbreeds.ui
 
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -19,16 +20,18 @@ import com.swordhealth.catbreeds.ui.feature.favourites.FavouriteViewModel
 fun AppNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    startDestination: String = NavigationItem.BreedList.route
+    startDestination: String = NavigationItem.BreedList.route,
+    showSnackbar: (String, SnackbarDuration) -> Unit
 ) {
     NavHost(
         modifier = modifier,
         navController = navController,
-        startDestination = startDestination
+        startDestination = startDestination,
     ) {
         composable(NavigationItem.BreedList.route) {
             val viewModel: BreedViewModel = hiltViewModel()
             BreedListScreen(
+                showSnackbar = showSnackbar,
                 navController = navController,
                 viewModel = viewModel,
                 onNavigationRequested = { itemId ->
@@ -45,12 +48,14 @@ fun AppNavHost(
         ) {
             val viewModel: BreedDetailsViewModel = hiltViewModel()
             BreedDetailsScreen(
+                showSnackbar = showSnackbar,
                 viewModel = viewModel,
                 state = viewModel.state)
         }
         composable(NavigationItem.Favourites.route) {
             val viewModel: FavouriteViewModel = hiltViewModel()
             FavouritesScreen(
+                showSnackbar = showSnackbar,
                 navController = navController,
                 viewModel = viewModel,
                 onNavigationRequested = { itemId ->
