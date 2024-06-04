@@ -88,7 +88,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
 
     // Image loading
-    implementation("io.coil-kt:coil-compose:1.4.0")
+    implementation("io.coil-kt:coil-compose:2.6.0")
 
     // Test
     testImplementation("junit:junit:4.13.2")
@@ -98,6 +98,16 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+
+
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:4.1.0")
+    androidTestImplementation("androidx.navigation:navigation-testing:2.5.3")
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.3.3")
+    androidTestImplementation("com.google.dagger:hilt-android-testing:2.44.2")
+    kaptTest("com.google.dagger:hilt-android-compiler:2.44.2")
+    kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.44.2")
 }
 
 // Allow references to generated code
