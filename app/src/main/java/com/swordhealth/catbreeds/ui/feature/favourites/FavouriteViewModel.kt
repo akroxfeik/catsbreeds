@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.swordhealth.catbreeds.data.model.Breed
 import com.swordhealth.catbreeds.data.repository.MainRepository
 import com.swordhealth.catbreeds.utils.NetworkHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -41,7 +42,7 @@ class FavouriteViewModel @Inject constructor(
                         state.favourites.onEach { favourite ->
                             mainRepository.getBreed(favourite.image_id).let {
                                 if (it.isSuccessful) {
-                                    val breed = it.body()!!.copy(favourite = favourite)
+                                    val breed = it.body()!!.copy(favourite = favourite, name = title(it.body()!!))
                                     state = state.copy(breeds = state.breeds + breed, isLoading = false)
                                     effects.send(FavouriteContract.Effect.DataWasLoaded)
                                 } else error()
@@ -59,5 +60,18 @@ class FavouriteViewModel @Inject constructor(
     private suspend fun error() {
         state = state.copy(isLoading = false)
         effects.send(FavouriteContract.Effect.Error)
+    }
+
+    private fun title(breed: Breed): String {
+        return "${breed.name} (~ ${calculateAvgLifeSpan(breed.life_span)} years)"
+    }
+
+    private fun calculateAvgLifeSpan(life_span: String): String {
+        val lifeSpan = life_span.split(" - ")
+        return if (lifeSpan.size == 1) {
+            lifeSpan[0]
+        } else {
+            return "${((lifeSpan[0].toInt() + lifeSpan[1].toInt()) / 2)}"
+        }
     }
 }
