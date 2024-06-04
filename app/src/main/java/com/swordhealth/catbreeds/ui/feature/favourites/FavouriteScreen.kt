@@ -23,15 +23,16 @@ fun FavouritesScreen(
     LaunchedEffect(effectFlow) {
         effectFlow.onEach { effect ->
             when (effect) {
-                is FavouriteContract.Effect.DataWasLoaded -> {
+                /*is FavouriteContract.Effect.DataWasLoaded -> {
                     showSnackbar("Favourites are loaded.", SnackbarDuration.Short)
-                }
+                }*/
                 is FavouriteContract.Effect.Error -> {
                     showSnackbar("An error occurred.", SnackbarDuration.Short)
                 }
                 is FavouriteContract.Effect.NoDataConnection -> {
                     showSnackbar("No data connection.", SnackbarDuration.Short)
                 }
+                else -> {}
             }
         }.collect()
     }

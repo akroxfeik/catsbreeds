@@ -23,15 +23,16 @@ fun BreedListScreen(
     LaunchedEffect(effectFlow) {
         effectFlow.onEach { effect ->
             when (effect) {
-                is BreedContract.Effect.DataWasLoaded -> {
+                /*is BreedContract.Effect.DataWasLoaded -> {
                     showSnackbar("Breeds are loaded.", SnackbarDuration.Short)
-                }
+                }*/
                 is BreedContract.Effect.Error -> {
                     showSnackbar("An error occurred.", SnackbarDuration.Short)
                 }
                 is BreedContract.Effect.NoDataConnection -> {
                     showSnackbar("No data connection.", SnackbarDuration.Short)
                 }
+                else -> {}
             }
         }.collect()
     }
