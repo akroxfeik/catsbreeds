@@ -34,20 +34,21 @@ class BreedViewModel @Inject constructor(
 
     private fun fetchBreeds() {
         viewModelScope.launch {
-            if (networkHelper.isNetworkConnected()) {
-                mainRepository.getBreeds().let {
-                    if (it.isSuccessful) {
-                        state = state.copy(breeds = it.body() ?: listOf(), isLoading = false)
-                        effects.send(BreedContract.Effect.DataWasLoaded)
-                    } else {
-                        state = state.copy(isLoading = false)
-                        effects.send(BreedContract.Effect.Error)
-                    }
+            val isConnected = networkHelper.isNetworkConnected()
+            val breedsResponse = if (isConnected) mainRepository.getBreeds() else null
+
+            state = state.copy(
+                breeds = breedsResponse?.body() ?: listOf(),
+                isLoading = false
+            )
+
+            effects.send(
+                when {
+                    breedsResponse?.isSuccessful == true -> BreedContract.Effect.DataWasLoaded
+                    isConnected -> BreedContract.Effect.Error
+                    else -> BreedContract.Effect.NoDataConnection
                 }
-            } else {
-                state = state.copy(isLoading = false)
-                effects.send(BreedContract.Effect.NoDataConnection)
-            }
+            )
         }
     }
 }
